@@ -1,0 +1,36 @@
+/*直角*/
+.pq_BT_REC {
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+}
+/*小圓角 */
+.pq_BT_SROUND {
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+/*圓角 */
+.pq_BT_ROUND {
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+/*大園角*/
+.pq_BT_BROUND {
+  border-radius: 40px;
+  -moz-border-radius: 40px;
+  -webkit-border-radius: 40px;
+}
+.popbtn{
+      display: block;
+      width: 160px;
+      height: 45px;
+      font-size: 23px;
+      padding: 5px 0;
+      color: #ffffff;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      margin: 0 auto;
+    }

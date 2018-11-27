@@ -1,0 +1,451 @@
+<template>
+<div class="row">
+  <div class="codeinfo col-lg-6 col-md-12 mb-3">
+    <div id="INPUT_BOX">
+      <div class="BOX_TOP" :style="{backgroundImage: `url(${Picture})` }">
+            <img id="cvs" src="" alt="" style="width:220px;height:60px;">
+        <a onclick="document.getElementById('INPUT_BOX').style.display='none';return false;" class="X" href="#"></a>
+      </div>
+      <div class="BOX_BG" :style="{borderColor:BGColor,background:BGColor}">
+        <ul class="content">
+          <li :class="{isRed: item.isRed,isBold:item.isBold}" v-for="(item,idx) in items" v-on:click="remove(idx)" :key="idx">{{item.text}}</li>
+        </ul>
+        <p class="yearprice" :class="{isBlack: inf.isBlack,isNormal:inf.isNormal}">{{inf.text}}</p>
+        <div class="pq_e_BT">
+          <ul class="ONE">
+            <li><a id="BT_COLOUR" class="floatbtn pq_BT_SROUND pq_BG_GRA_RED " href="#">{{buttonText}}</a></li>
+          </ul>
+        </div>
+        <div class="bottom">
+          <div class="inf_title">
+            <p>白金服務諮詢專線</p>
+          </div>
+          <div class="inf_text">
+            <p class="telphone">(02) 26980111#512 </p>
+            <span class="service">服務時間：週一至週五09:00-18:00</span>
+            <div class="e_BT">
+              <ul class="one">
+                <li><a class="floatbtn BT_COLOUR_bottom" href="#">我想瞭解本服務</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 mb-3">
+    <div class="card text">
+      <h5 class="card-header"></h5>
+      <div class="card-body">
+        <div class="pcrUrl">
+              <label for="Picture">圖片預覽</label>
+              <input type="text" class="form-control " id="Picture" placeholder="圖片網址" v-model.trim="Picture">
+          </div>
+          <div class="picFile mt-1">
+            <button class="btn "@click="openPicker()">本地端上傳</button>
+            <input id="file" type="file" @change="openFile(this)" style="display: none">
+          </div>
+        <div class="from-group">
+          <h2>優惠文字資訊</h2>
+          <div class="form-row mt-2 mb-2">
+            <div class="col-10">
+              <input type="text" class="form-control" v-model.trim="input">
+            </div>
+            <div class="col-2">
+              <button class="btn btn-primary" v-on:click="add">+</button>
+            </div>
+            <div class="col mt-2">
+              <div class="form-check form-check-inline ">
+                <input class="form-check-input" type="checkbox" id="toptextcolor" v-model="text.isRed">
+                <label class="form-check-label" for="toptextcolor">
+                  紅色
+                </label>
+              </div>
+              <div class="form-check form-check-inline ">
+                <input class="form-check-input" type="checkbox" id="topfontweight" v-model="text.isBold">
+                <label class="form-check-label" for="topfontweight">
+                  粗體
+                </label>
+              </div>
+              <button class="btn btn-danger" v-on:click="pop"> 刪除最後一項 </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group mt-2">
+          <label for="text">年費文字資訊</label>
+          <input type="text" class="form-control mt-2" id="text" placeholder="1年期NT$3,600N元" v-model.trim="inf.text">
+          <div class="form-check form-check-inline mt-2">
+            <input class="form-check-input" type="checkbox" id="yeartextcolor" v-model="inf.isBlack">
+            <label class="form-check-label" for="yeartextcolor">
+              黑色
+            </label>
+          </div>
+          <div class="form-check form-check-inline mt-2">
+            <input class="form-check-input" type="checkbox" id="yearfontweight" v-model="inf.isNormal">
+            <label class="form-check-label" for="yearfontweight">
+              一般體
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card button">
+      <h5 class="card-header"></h5>
+      <div class="card-body">
+        <div class="form mt-1">
+          <label for="text">按鈕文字</label>
+          <input type="text" class="form-control " id="text" placeholder="立即加入" v-model.trim="buttonText">
+        </div>
+        <div class="form-row mt-1">
+          <label for="border">下方底色</label>
+          <input type="text" class="form-control mt-2" id="border" placeholder="#e6e6e6" maxlength="7" v-model.trim="BGColor" :style="{background:BGColor}">
+        </div>
+        <Buttonborder v-on:borderchange="changeBorder"></Buttonborder>
+        <Buttonbgcolor v-on:bgchange="changeColor"></Buttonbgcolor>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+<script>
+import Buttonborder from './floatbutton/button-border';
+import Buttonbgcolor from './floatbutton/button-bgcolor';
+export default {
+    data() {
+      return {
+        input: "",
+        Picture: "",
+        items: [
+          {
+            text: "• 服務升級！登入算紫微財 富命盤(價值$480元)",
+            isRed: true,
+            isBold: true
+          },
+          {
+            text: "• 加碼贈送！張盛舒《愛情 有方》電子書(價值$480 元)",
+            isRed: true,
+            isBold: true
+          },
+          {
+            text: "• 批命格、十年大運、歲運 詳 批等熱門服務",
+            isRed: false,
+            isBold: false
+          },
+          { text: "• 300元算命金", isRed: false, isBold: false },
+          {
+            text: "• 300元算命金",
+            isRed: false,
+            isBold: false
+          }
+        ],
+        text: [
+          {
+            isRed: false,
+            isBold: false
+          }
+        ],
+        inf: [
+          {
+            text: "1年期NT$3,600元",
+            isBlack: false,
+            isNormal: false
+          }
+        ],
+        buttonText: "立即加入",
+        BGColor: "#eeeeee"
+      };
+    },
+    components:{
+      Buttonborder,
+      Buttonbgcolor
+    },
+    methods: {
+      add() {
+        if (!this.input) {
+          alert("請填資料");
+          return;
+        }
+        this.items.push({
+          text: "•  " + this.input,
+          isRed: this.text.isRed,
+          isBold: this.text.isBold
+        });
+        this.input = "";
+      },
+      remove(index) {
+        this.items.splice(index, 1);
+      },
+      pop() {
+        this.items.pop();
+      },
+      changeColor(e) {
+        const heading = document.getElementById("BT_COLOUR").classList;
+        heading.replace(heading[1],e)
+      },
+      changeBorder(e){
+        const heading = document.getElementById("BT_COLOUR").classList;
+        heading.replace(heading[0],e)
+      },
+      openPicker() {
+      var input = document.getElementById('file');
+      input.click();
+    },
+    openFile(input) {
+      var input = document.getElementById('file');
+      let file = input.files[0];
+      // console.log(file);
+      //URL.createObjectURL (檔案物件貨blob物件)
+      let src = URL.createObjectURL(file);
+      // console.log(src);
+      var cvs = document.getElementById('cvs')
+      let img = new Image();
+      img.src = src;
+      // var ctx = cvs.getContext('2d')
+      img.addEventListener('load', () =>{
+      //根據仔入的圖片尺寸來調整cancas 的尺寸
+        cvs.style.width = img.width
+        cvs.style.height = img.height
+        cvs.src=img.src
+      })
+    }
+    }
+  };
+</script>
+
+<style scoped lang="scss">
+@import "../public/css/all.scss";
+
+#INPUT_BOX {
+  background-color: #eee;
+  width: 220px;
+  max-height: 540px;
+  position: relative;
+  overflow: hidden;
+  /* position: fixed;
+  right: 0.8%;
+  top: 15%; */
+  box-shadow: 0px 0px 16px rgba($color: #000000, $alpha: 0.4);
+
+  align-items: center;
+}
+.BOX_TOP {
+  width: 100%;
+  height: 60px;
+  position: relative;
+  background-color: #e6e6e6;
+}
+.BOX_TOP a.X {
+  display: block;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  background-color: grey;
+  top: 0;
+  right: 0;
+  opacity: 0.3;
+  &:hover {
+    opacity: 1;
+    z-index: 999;
+  }
+}
+a.X::before,
+a.X::after {
+  content: "";
+  position: absolute;
+  height: 40px;
+  width: 3px;
+  left: 50%;
+  top: 50%;
+  background-color: #fff;
+}
+a.X::before {
+  transform: translate(0%, -50%) rotate(45deg);
+}
+a.X::after {
+  transform: translate(0%, -50%) rotate(-45deg);
+}
+.BOX_BG {
+  width: 100%;
+  border-bottom: 7px solid #eeeeee;
+}
+.BOX_BG .content {
+  padding: 8px 14px;
+  padding-bottom: 0px;
+  max-height: 235px;
+  overflow: hidden;
+}
+.BOX_BG .content li {
+  line-height: 23px;
+  margin: 4px 0px;
+  font-size: 16px;
+}
+.BOX_BG .content li.isRed {
+  color: #cc0000;
+}
+.BOX_BG .content li.isBold {
+  font-weight: bold;
+}
+.BOX_BG .content li:last-child {
+  margin-bottom: 0px;
+}
+.BOX_BG .content .spot {
+  color: #cc0000;
+  font-weight: bold;
+}
+.BOX_BG .yearprice {
+  padding: 4px 0px;
+  text-align: center;
+  font-size: 21px;
+  color: #cc0000;
+  font-weight: bold;
+}
+.BOX_BG .yearprice.isBlack {
+  color: black;
+}
+.BOX_BG .yearprice.isNormal {
+  font-weight: normal;
+}
+.pq_e_BT{
+  clear: both;
+  width: 90%;
+  margin: 0 auto;
+  .ONE{
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    .pq_BT_SROUND{
+      display: block;
+      width: 80%;
+      padding: 8px 0;
+      height: auto;
+      overflow: hidden;
+      margin: 0 auto;
+      text-decoration: none;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1em;
+      line-height: 1.2em;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+  }
+}
+.BOX_BG .e_BT {
+  clear: both;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+.BOX_BG .e_BT ul.one {
+  height: auto;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.BOX_BG .e_BT ul.one li a {
+  display: block;
+  padding: 0;
+  width: 190px;
+  height: 46px;
+  overflow: hidden;
+  margin: 0 auto;
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 46px;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+
+.BOX_BG .bottom {
+  width: 190px;
+  height: 142px;
+  margin: 0 auto;
+  margin-top: 8px;
+  background-color: #ffffff;
+}
+.BOX_BG .bottom .inf_title {
+  height: 35px;
+  font-size: 20px;
+  text-align: center;
+  background-color: #7e66de;
+  color: #ffffff;
+  p {
+    line-height: 35px;
+    font-weight: bold;
+  }
+}
+.BOX_BG .bottom .inf_text {
+  padding: 8px 0px;
+  text-align: center;
+}
+.BOX_BG .bottom .inf_text >p.telphone {
+  padding: 0;
+  font-weight: bold;
+  font-size: 19px;
+}
+.BOX_BG .bottom .inf_text span {
+  width: 80%;
+  font-size: 8px;
+}
+.BOX_BG .bottom .e_BT {
+  clear: both;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  padding: 4px 0px;
+  margin: 0 auto;
+}
+.BOX_BG .bottom .e_BT ul.one li a {
+  display: block;
+  width: 170px;
+  height: 40px;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 0;
+  text-decoration: none;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+  color: #ffffff;
+}
+a.BT_COLOUR_bottom {
+  background: #d548f8;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #d548f8 0%, #9121d1 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #d548f8 0%, #9121d1 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #d548f8 0%, #9121d1 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  border-radius: 5px;
+  border: 1px solid #9121d1;
+  box-shadow: inset 0px 0px 2px rgba(255, 255, 255, 1);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d548f8', endColorstr='#9121d1',GradientType=0 ); /* IE6-9 */
+  &:hover {
+    background: #9121d1; /* Old browsers */
+    background: -moz-linear-gradient(
+      top,
+      #9121d1 0%,
+      #d548f8 100%
+    ); /* FF3.6-15 */
+    background: -webkit-linear-gradient(
+      top,
+      #9121d1 0%,
+      #d548f8 100%
+    ); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(
+      to bottom,
+      #9121d1 0%,
+      #d548f8 100%
+    ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9121d1', endColorstr='#d548f8',GradientType=0 ); /* IE6-9 */
+  }
+}
+
+</style>
+
+
